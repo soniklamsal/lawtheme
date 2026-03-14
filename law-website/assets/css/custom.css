@@ -76,6 +76,11 @@
     border-bottom: 2px solid transparent;
 }
 
+/* Transparent navbar menu items (white text) */
+.navbar-transparent #nav-menu-wrapper ul li a {
+    color: #ffffff;
+}
+
 #nav-menu-wrapper ul li a:hover {
     color: #26cf71 !important;
     border-bottom-color: #26cf71 !important;
@@ -115,4 +120,36 @@
     font-weight: 800;
     cursor: pointer;
     pointer-events: auto;
+}
+
+/* Transparent navbar logo text (white) */
+.navbar-transparent .site-title-text {
+    background: none;
+    -webkit-text-fill-color: #ffffff;
+    text-fill-color: #ffffff;
+}
+
+
+/* =========================================
+   Navbar Scroll Behavior
+========================================= */
+
+.navbar-scrolled {
+    background: rgba(255, 255, 255, 0.95) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.navbar-scrolled .site-title-text {
+    background: linear-gradient(135deg, #26cf71 0%, #1A2B3C 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+.navbar-scrolled #nav-menu-wrapper ul li a {
+    color: #333 !important;
+}
+
+.navbar-scrolled #menu-toggle {
+    color: #333 !important;
 }

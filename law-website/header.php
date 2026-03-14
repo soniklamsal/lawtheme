@@ -48,7 +48,7 @@
 
 <!-- ================= HEADER ================= -->
 <header id="masthead"
-    class="site-header fixed inset-x-0 top-0 z-[100] bg-white/95 shadow-lg transition-all duration-300">
+    class="site-header fixed inset-x-0 top-0 z-[100] transition-all duration-300 <?php echo is_front_page() ? 'bg-transparent' : 'bg-white/95 shadow-lg'; ?>">
 
     <nav class="h-[4.5rem] flex items-center justify-between px-6 max-w-6xl mx-auto">
 
@@ -59,11 +59,11 @@
                 if ( has_custom_logo() ) :
                     the_custom_logo();
                     ?>
-                    <span class="site-title-text text-lg font-extrabold mt-1"><?php bloginfo( 'name' ); ?></span>
+                    <span class="site-title-text text-lg font-extrabold mt-1 transition-colors duration-300 <?php echo is_front_page() ? 'text-white' : 'text-text-dark'; ?>"><?php bloginfo( 'name' ); ?></span>
                     <?php
                 else :
                     ?>
-                    <span class="text-2xl font-bold text-text-dark">
+                    <span class="text-2xl font-bold transition-colors duration-300 <?php echo is_front_page() ? 'text-white' : 'text-text-dark'; ?>">
                         <?php bloginfo( 'name' ); ?>
                     </span>
                     <?php
@@ -84,7 +84,7 @@
             <?php
             wp_nav_menu( array(
                 'theme_location' => 'primary',
-                'menu_class'     => 'flex gap-8 list-none md:flex-row flex-col md:gap-8 gap-6',
+                'menu_class'     => 'flex gap-8 list-none md:flex-row flex-col md:gap-8 gap-6 nav-menu-items',
                 'container'      => false,
                 'fallback_cb'    => false,
                 'items_wrap'     => '<ul class="%2$s">%3$s</ul>',
@@ -95,7 +95,7 @@
 
         <!-- MOBILE TOGGLE -->
         <button id="menu-toggle"
-                class="text-2xl text-[#333] cursor-pointer bg-transparent border-none md:hidden">
+                class="text-2xl cursor-pointer bg-transparent border-none md:hidden transition-colors duration-300 <?php echo is_front_page() ? 'text-white' : 'text-[#333]'; ?>">
             ☰
         </button>
 

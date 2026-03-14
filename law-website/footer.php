@@ -14,8 +14,7 @@
             </svg>
         </div>
 
-        <div class="max-w-6xl py-10 px-4 sm:px-6 text-gray-800 sm:flex justify-between mx-auto pt-20">
-            <div class="p-5 sm:w-2/12 border-r">
+        <div class="max-w-6xl py-10 px-4 sm:px-6 text-gray-800 sm:flex justify-between mx-auto pt-20">            <div class="p-5 sm:w-2/12 border-r">
                 <div class="text-sm uppercase text-[#26cf71] font-bold">Menu</div>
                 <ul>
                     <li class="my-2">
@@ -100,6 +99,9 @@
             <div class="my-5">© Copyright 2024. All Rights Reserved.</div>
         </div>
     </div>
+
+<!-- WhatsApp Floating Button -->
+<?php get_template_part( 'template-parts/home-whatsapp-button' ); ?>
 
 <?php wp_footer(); ?>
 </body>

@@ -9,10 +9,10 @@ get_header(); ?>
 
 <main id="primary" class="site-main front-page home-service-page">
     
-    <!-- Hero Section -->
+    <!-- Hero Section (After Navbar) -->
     <?php get_template_part( 'template-parts/home', 'hero' ); ?>
     
-    <!-- Category Section -->
+    <!-- Category Section (Browse by Practice Area) -->
     <?php get_template_part( 'template-parts/home', 'category' ); ?>
     
     <!-- Featured Services Section -->

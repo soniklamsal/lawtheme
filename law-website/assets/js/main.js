@@ -100,17 +100,29 @@
             });
         });
         
-        // Header scroll effect
-        window.addEventListener('scroll', function() {
+        // Header scroll effect (only on homepage)
+        const isHomePage = document.body.classList.contains('home') || document.body.classList.contains('page-template-default');
+        
+        if (isHomePage) {
             const header = document.getElementById('masthead');
-            if (header) {
-                if (window.pageYOffset > 50) {
-                    header.classList.add('scrolled');
-                } else {
-                    header.classList.remove('scrolled');
-                }
+            
+            // Add transparent class initially
+            if (header && window.pageYOffset === 0) {
+                header.classList.add('navbar-transparent');
             }
-        });
+            
+            window.addEventListener('scroll', function() {
+                if (header) {
+                    if (window.pageYOffset > 50) {
+                        header.classList.add('navbar-scrolled');
+                        header.classList.remove('navbar-transparent');
+                    } else {
+                        header.classList.remove('navbar-scrolled');
+                        header.classList.add('navbar-transparent');
+                    }
+                }
+            });
+        }
     });
     
     // Setup drag to scroll

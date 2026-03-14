@@ -1,32 +1,61 @@
 <?php
 /**
- * Template part for home FAQ section
+ * Template part for home FAQ section - DYNAMIC
  *
  * @package LawFirm_Pro
  */
 
-$faqs = array(
-    array(
-        'question' => 'What is Genius Law and Associates?',
-        'answer' => 'Genius Law and Associates is a comprehensive legal services firm that connects you with experienced attorneys for all your legal needs including family law, corporate law, criminal defense, property disputes, and more.',
-    ),
-    array(
-        'question' => 'How can I schedule a legal consultation?',
-        'answer' => 'You can schedule a consultation by browsing our practice areas, selecting the legal service you need, and clicking the contact button. You can also call us directly or use our WhatsApp contact for immediate assistance.',
-    ),
-    array(
-        'question' => 'What types of legal services are available?',
-        'answer' => 'We offer a wide range of legal services including family law, criminal defense, corporate law, property disputes, immigration law, contract drafting, employment law, personal injury, and many more specialized legal services.',
-    ),
-    array(
-        'question' => 'How are the attorneys selected?',
-        'answer' => 'All our attorneys are licensed professionals with extensive experience in their practice areas. They undergo rigorous verification including bar association membership, case history review, and client satisfaction assessments.',
-    ),
-    array(
-        'question' => 'What locations does Genius Law and Associates serve?',
-        'answer' => 'We currently provide legal services in Kathmandu, Lalitpur, Bhaktapur, Pokhara, and other major cities across Nepal. We also handle cases in district and supreme courts nationwide.',
-    ),
-);
+// Get FAQ items from customizer
+$faq_items = get_theme_mod( 'lawfirm_faq_items', '' );
+
+// Decode JSON string to array
+if ( ! empty( $faq_items ) && is_string( $faq_items ) ) {
+    $faq_items = json_decode( $faq_items, true );
+}
+
+// Ensure it's an array
+if ( ! is_array( $faq_items ) ) {
+    $faq_items = array();
+}
+
+// Get stats from customizer
+$cases_won_number = get_theme_mod( 'lawfirm_cases_won_number', '500' );
+$cases_won_label = get_theme_mod( 'lawfirm_cases_won_label', 'Cases Won' );
+$attorneys_number = get_theme_mod( 'lawfirm_attorneys_number', '50' );
+$attorneys_label = get_theme_mod( 'lawfirm_attorneys_label', 'Expert Attorneys' );
+$practice_areas_number = get_theme_mod( 'lawfirm_practice_areas_number', '25' );
+$practice_areas_label = get_theme_mod( 'lawfirm_practice_areas_label', 'Practice Areas' );
+
+// Default FAQ items if none set
+if ( empty( $faq_items ) ) {
+    $faq_items = array(
+        array(
+            'question' => 'What is Genius Law and Associates?',
+            'answer' => 'Genius Law and Associates is a comprehensive legal services firm that connects you with experienced attorneys for all your legal needs including family law, corporate law, criminal defense, property disputes, and more.',
+        ),
+        array(
+            'question' => 'How can I schedule a legal consultation?',
+            'answer' => 'You can schedule a consultation by browsing our practice areas, selecting the legal service you need, and clicking the contact button. You can also call us directly or use our WhatsApp contact for immediate assistance.',
+        ),
+        array(
+            'question' => 'What types of legal services are available?',
+            'answer' => 'We offer a wide range of legal services including family law, criminal defense, corporate law, property disputes, immigration law, contract drafting, employment law, personal injury, and many more specialized legal services.',
+        ),
+        array(
+            'question' => 'How are the attorneys selected?',
+            'answer' => 'All our attorneys are licensed professionals with extensive experience in their practice areas. They undergo rigorous verification including bar association membership, case history review, and client satisfaction assessments.',
+        ),
+        array(
+            'question' => 'What locations does Genius Law and Associates serve?',
+            'answer' => 'We currently provide legal services in Kathmandu, Lalitpur, Bhaktapur, Pokhara, and other major cities across Nepal. We also handle cases in district and supreme courts nationwide.',
+        ),
+    );
+}
+
+// Don't display section if no FAQs
+if ( empty( $faq_items ) ) {
+    return;
+}
 ?>
 
 <div class="bg-white w-full py-20 px-6">
@@ -34,8 +63,10 @@ $faqs = array(
         <h2 class="text-3xl font-bold text-[#1A2B3C] mb-10">Frequently Asked Questions</h2>
 
         <div class="space-y-3 mb-24">
-            <?php foreach ( $faqs as $index => $faq ) : ?>
-                <div class="faq-item" data-index="<?php echo $index; ?>">
+            <?php foreach ( $faq_items as $index => $faq ) : 
+                if ( empty( $faq['question'] ) ) continue;
+            ?>
+                <div class="faq-item" data-index="<?php echo esc_attr( $index ); ?>">
                     <div class="faq-question bg-gray-50 rounded-md border border-gray-100 px-6 py-4 flex justify-between items-center cursor-pointer hover:bg-gray-100 transition">
                         <span class="text-gray-800 font-medium text-sm md:text-base">
                             <?php echo esc_html( $faq['question'] ); ?>
@@ -57,34 +88,34 @@ $faqs = array(
             <div class="flex flex-col items-center">
                 <div class="relative">
                     <span class="text-8xl font-bold text-[#26cf71]/10 select-none absolute -top-8 left-1/2 -translate-x-1/2">
-                        500+
+                        <?php echo esc_html( $cases_won_number ); ?>+
                     </span>
-                    <span class="text-5xl font-extrabold text-[#26cf71] relative counter" data-target="500">0</span><span class="text-5xl font-extrabold text-[#26cf71]">+</span>
+                    <span class="text-5xl font-extrabold text-[#26cf71] relative counter" data-target="<?php echo esc_attr( $cases_won_number ); ?>">0</span><span class="text-5xl font-extrabold text-[#26cf71]">+</span>
                 </div>
                 <div class="w-12 h-0.5 bg-[#26cf71] my-4"></div>
-                <p class="text-xl font-bold text-gray-800">Cases Won</p>
+                <p class="text-xl font-bold text-gray-800"><?php echo esc_html( $cases_won_label ); ?></p>
             </div>
 
             <div class="flex flex-col items-center">
                 <div class="relative">
                     <span class="text-8xl font-bold text-[#26cf71]/10 select-none absolute -top-8 left-1/2 -translate-x-1/2">
-                        50+
+                        <?php echo esc_html( $attorneys_number ); ?>+
                     </span>
-                    <span class="text-5xl font-extrabold text-[#26cf71] relative counter" data-target="50">0</span><span class="text-5xl font-extrabold text-[#26cf71]">+</span>
+                    <span class="text-5xl font-extrabold text-[#26cf71] relative counter" data-target="<?php echo esc_attr( $attorneys_number ); ?>">0</span><span class="text-5xl font-extrabold text-[#26cf71]">+</span>
                 </div>
                 <div class="w-12 h-0.5 bg-[#26cf71] my-4"></div>
-                <p class="text-xl font-bold text-gray-800">Expert Attorneys</p>
+                <p class="text-xl font-bold text-gray-800"><?php echo esc_html( $attorneys_label ); ?></p>
             </div>
 
             <div class="flex flex-col items-center">
                 <div class="relative">
                     <span class="text-8xl font-bold text-[#26cf71]/10 select-none absolute -top-8 left-1/2 -translate-x-1/2">
-                        25+
+                        <?php echo esc_html( $practice_areas_number ); ?>+
                     </span>
-                    <span class="text-5xl font-extrabold text-[#26cf71] relative counter" data-target="25">0</span><span class="text-5xl font-extrabold text-[#26cf71]">+</span>
+                    <span class="text-5xl font-extrabold text-[#26cf71] relative counter" data-target="<?php echo esc_attr( $practice_areas_number ); ?>">0</span><span class="text-5xl font-extrabold text-[#26cf71]">+</span>
                 </div>
                 <div class="w-12 h-0.5 bg-[#26cf71] my-4"></div>
-                <p class="text-xl font-bold text-gray-800">Practice Areas</p>
+                <p class="text-xl font-bold text-gray-800"><?php echo esc_html( $practice_areas_label ); ?></p>
             </div>
         </div>
     </div>
