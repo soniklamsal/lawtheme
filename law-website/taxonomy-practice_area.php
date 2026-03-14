@@ -122,7 +122,7 @@ $current_filter = isset( $_GET['filter'] ) ? sanitize_text_field( $_GET['filter'
             ) );
             
             if ( $services_query->have_posts() ) : ?>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div id="service-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <?php while ( $services_query->have_posts() ) : $services_query->the_post(); 
                         // Get custom fields
                         $provider_name = get_post_meta( get_the_ID(), 'provider_name', true );
@@ -136,7 +136,7 @@ $current_filter = isset( $_GET['filter'] ) ? sanitize_text_field( $_GET['filter'
                         if ( ! $review_count ) $review_count = '0';
                         if ( ! $image_url ) $image_url = 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=400';
                     ?>
-                        <a href="<?php the_permalink(); ?>" class="bg-transparent block">
+                        <a href="<?php the_permalink(); ?>" class="bg-transparent block service-card">
                             <div class="rounded-2xl overflow-hidden mb-4 aspect-[4/3]">
                                 <img
                                     src="<?php echo esc_url( $image_url ); ?>"
@@ -174,6 +174,183 @@ $current_filter = isset( $_GET['filter'] ) ? sanitize_text_field( $_GET['filter'
                         </a>
                     <?php endwhile; ?>
                 </div>
+                
+                <!-- Load More / Show Less Button -->
+                <div id="load-more-container" class="text-center mt-8" style="display: none;">
+                    <button id="load-more-btn" class="px-8 py-3 bg-[#26cf71] text-white font-semibold rounded-lg hover:bg-[#1eb863] transition-all duration-300 shadow-md hover:shadow-lg">
+                        Load More
+                    </button>
+                </div>
+                
+                <script>
+                /**
+                 * Load More / Show Less functionality for service cards
+                 * 
+                 * WHY THE PREVIOUS VERSION FAILED:
+                 * 1. Grid column calculation was unreliable - CSS grid-template-columns can return 'none' or complex values
+                 * 2. Timing issues - script ran before layout was fully rendered
+                 * 3. Responsive breakpoints weren't properly handled
+                 * 4. Cards per row detection using getBoundingClientRect() was inconsistent
+                 */
+                (function() {
+                    'use strict';
+                    
+                    let isExpanded = false;
+                    let currentCardsPerRow = 1;
+                    const VISIBLE_ROWS = 2;
+                    
+                    function initLoadMore() {
+                        const grid = document.getElementById('service-cards-grid');
+                        const cards = Array.from(document.querySelectorAll('.service-card'));
+                        const loadMoreBtn = document.getElementById('load-more-btn');
+                        const loadMoreContainer = document.getElementById('load-more-container');
+                        
+                        if (!grid || !cards.length || !loadMoreBtn || !loadMoreContainer) {
+                            console.log('Load More: Missing required elements');
+                            return;
+                        }
+                        
+                        console.log('Load More: Found', cards.length, 'cards');
+                        
+                        /**
+                         * Calculate cards per row based on screen width and Tailwind breakpoints
+                         * This is more reliable than trying to read CSS grid values
+                         */
+                        function calculateCardsPerRow() {
+                            const screenWidth = window.innerWidth;
+                            
+                            // Match Tailwind CSS breakpoints: grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
+                            if (screenWidth >= 1024) { // lg breakpoint
+                                return 3;
+                            } else if (screenWidth >= 640) { // sm breakpoint  
+                                return 2;
+                            } else {
+                                return 1;
+                            }
+                        }
+                        
+                        /**
+                         * Initialize card visibility based on current layout
+                         */
+                        function setupCardVisibility() {
+                            currentCardsPerRow = calculateCardsPerRow();
+                            const totalCards = cards.length;
+                            const cardsToShow = currentCardsPerRow * VISIBLE_ROWS;
+                            
+                            console.log('Setup:', {
+                                screenWidth: window.innerWidth,
+                                cardsPerRow: currentCardsPerRow,
+                                totalCards: totalCards,
+                                cardsToShow: cardsToShow,
+                                needsButton: totalCards > cardsToShow
+                            });
+                            
+                            // Reset all cards to visible first
+                            cards.forEach(card => {
+                                card.style.display = '';
+                            });
+                            
+                            // Check if we need the Load More button
+                            if (totalCards <= cardsToShow) {
+                                // Not enough cards to warrant a Load More button
+                                loadMoreContainer.style.display = 'none';
+                                isExpanded = false;
+                                console.log('Load More: Not enough cards, hiding button');
+                                return;
+                            }
+                            
+                            // We have enough cards, show the button and hide excess cards
+                            loadMoreContainer.style.display = 'block';
+                            
+                            if (!isExpanded) {
+                                // Hide cards beyond the first 2 rows
+                                cards.forEach((card, index) => {
+                                    if (index >= cardsToShow) {
+                                        card.style.display = 'none';
+                                    }
+                                });
+                                loadMoreBtn.textContent = 'Load More';
+                                console.log('Load More: Hidden', (totalCards - cardsToShow), 'cards');
+                            } else {
+                                // Keep all cards visible if already expanded
+                                loadMoreBtn.textContent = 'Show Less';
+                            }
+                        }
+                        
+                        /**
+                         * Toggle between showing all cards and showing only first 2 rows
+                         */
+                        function toggleCardVisibility() {
+                            const cardsToShow = currentCardsPerRow * VISIBLE_ROWS;
+                            
+                            if (isExpanded) {
+                                // Collapse: Hide cards beyond first 2 rows
+                                cards.forEach((card, index) => {
+                                    if (index >= cardsToShow) {
+                                        card.style.display = 'none';
+                                    } else {
+                                        card.style.display = '';
+                                    }
+                                });
+                                
+                                loadMoreBtn.textContent = 'Load More';
+                                isExpanded = false;
+                                
+                                // Smooth scroll to grid top after a brief delay
+                                setTimeout(() => {
+                                    grid.scrollIntoView({ 
+                                        behavior: 'smooth', 
+                                        block: 'start',
+                                        inline: 'nearest'
+                                    });
+                                }, 150);
+                                
+                                console.log('Load More: Collapsed to 2 rows');
+                                
+                            } else {
+                                // Expand: Show all cards
+                                cards.forEach(card => {
+                                    card.style.display = '';
+                                });
+                                
+                                loadMoreBtn.textContent = 'Show Less';
+                                isExpanded = true;
+                                
+                                console.log('Load More: Expanded to show all cards');
+                            }
+                        }
+                        
+                        // Event listener for Load More button
+                        loadMoreBtn.addEventListener('click', toggleCardVisibility);
+                        
+                        // Handle window resize with debouncing
+                        let resizeTimeout;
+                        window.addEventListener('resize', function() {
+                            clearTimeout(resizeTimeout);
+                            resizeTimeout = setTimeout(() => {
+                                console.log('Load More: Window resized, recalculating...');
+                                setupCardVisibility();
+                            }, 300);
+                        });
+                        
+                        // Initial setup with delay to ensure DOM is fully rendered
+                        setTimeout(() => {
+                            setupCardVisibility();
+                        }, 200);
+                        
+                        console.log('Load More: Initialized successfully');
+                    }
+                    
+                    // Initialize when DOM is ready
+                    if (document.readyState === 'loading') {
+                        document.addEventListener('DOMContentLoaded', initLoadMore);
+                    } else {
+                        // DOM already loaded, run immediately
+                        initLoadMore();
+                    }
+                    
+                })();
+                </script>
             <?php else : ?>
                 <div class="text-center py-12">
                     <p class="text-gray-600 text-lg"><?php esc_html_e( 'No legal services found in this practice area.', 'lawfirm-pro' ); ?></p>
