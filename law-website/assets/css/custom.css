@@ -1,0 +1,118 @@
+/* =========================================
+   Custom styles that can't be done with Tailwind CDN
+========================================= */
+
+/* Scrollbar hiding */
+.scrollbar-hide::-webkit-scrollbar,
+#category-scroll::-webkit-scrollbar,
+#featured-services-scroll::-webkit-scrollbar,
+#popular-services-scroll::-webkit-scrollbar,
+#testimonials-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide,
+#category-scroll,
+#featured-services-scroll,
+#popular-services-scroll,
+#testimonials-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+
+/* =========================================
+   WhatsApp Pulse Animation
+========================================= */
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(37, 211, 102, 0);
+    }
+}
+
+.whatsapp-float {
+    animation: pulse 2s infinite;
+}
+
+
+/* =========================================
+   Smooth Font Rendering
+========================================= */
+
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* =========================================
+   WordPress Menu Styling
+========================================= */
+
+#nav-menu-wrapper ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#nav-menu-wrapper ul li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#nav-menu-wrapper ul li a {
+    color: #333;
+    font-weight: 500;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+    padding-bottom: 6px;
+    display: inline-block;
+    border-bottom: 2px solid transparent;
+}
+
+#nav-menu-wrapper ul li a:hover {
+    color: #26cf71 !important;
+    border-bottom-color: #26cf71 !important;
+}
+
+#nav-menu-wrapper ul li.current-menu-item > a,
+#nav-menu-wrapper ul li.current_page_item > a,
+#nav-menu-wrapper ul li.current-menu-ancestor > a {
+    color: #26cf71 !important;
+    border-bottom-color: #26cf71 !important;
+}
+
+
+/* =========================================
+   Logo Styling (Fixed & Professional)
+========================================= */
+
+.custom-logo-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+}
+
+.custom-logo {
+    height: 65px;   /* Increased from 55px */
+    width: auto;
+    object-fit: contain;
+}
+
+.site-title-text {
+    background: linear-gradient(135deg, #26cf71 0%, #1A2B3C 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    font-weight: 800;
+    cursor: pointer;
+    pointer-events: auto;
+}
