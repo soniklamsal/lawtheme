@@ -1,0 +1,104 @@
+This file contains the About Choose Us admin page code to be added to functions.php after the About Values save function.
+
+Insert this code after line 695 (after the aboutvalues save function closes):
+
+/**
+ * About Choose Us Section admin page content
+ */
+function lawfirm_pro_aboutchooseus_section_page() {
+    if ( ! current_user_can( 'manage_options' ) ) return;
+
+    if ( isset( $_POST['lawfirm_aboutchooseus_section_nonce'] ) && wp_verify_nonce( $_POST['lawfirm_aboutchooseus_section_nonce'], 'lawfirm_aboutchooseus_section_save' ) ) {
+        lawfirm_pro_save_aboutchooseus_section();
+        echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'About Choose Us Section saved successfully!', 'lawfirm-pro' ) . '</p></div>';
+    }
+
+    $title = get_theme_mod( 'aboutchooseus_title', 'Why Choose <span class="text-[#26cf71]">Genius Law</span>' );
+    $subtitle = get_theme_mod( 'aboutchooseus_subtitle', 'We stand out from other law firms through our commitment to excellence and client satisfaction' );
+    
+    $reasons = array();
+    for ($i = 1; $i <= 6; $i++) {
+        $reasons[$i] = array(
+            'title' => get_theme_mod( "aboutchooseus_{$i}_title", '' ),
+            'desc' => get_theme_mod( "aboutchooseus_{$i}_desc", '' )
+        );
+    }
+    
+    // Set defaults
+    if (empty($reasons[1]['title'])) $reasons[1] = array('title' => 'Proven Track Record', 'desc' => 'Over 500 successful cases with a high success rate across all practice areas.');
+    if (empty($reasons[2]['title'])) $reasons[2] = array('title' => '24/7 Availability', 'desc' => "We're here when you need us most, with round-the-clock support for urgent matters.");
+    if (empty($reasons[3]['title'])) $reasons[3] = array('title' => 'Transparent Pricing', 'desc' => 'Clear, upfront pricing with no hidden fees. We offer flexible payment plans.');
+    if (empty($reasons[4]['title'])) $reasons[4] = array('title' => 'Expert Team', 'desc' => '50+ experienced attorneys specializing in 25+ different areas of law.');
+    if (empty($reasons[5]['title'])) $reasons[5] = array('title' => 'Nationwide Coverage', 'desc' => 'Serving clients across Nepal with representation in all major courts.');
+    if (empty($reasons[6]['title'])) $reasons[6] = array('title' => 'Confidentiality Guaranteed', 'desc' => 'Your privacy is paramount. All communications are strictly confidential.');
+    ?>
+    
+    <div class="wrap">
+        <h1><?php esc_html_e( 'About Choose Us Section', 'lawfirm-pro' ); ?></h1>
+        <p><?php esc_html_e( 'Customize the "Why Choose Us" section with 6 reasons.', 'lawfirm-pro' ); ?></p>
+        
+        <form method="post" action="">
+            <?php wp_nonce_field( 'lawfirm_aboutchooseus_section_save', 'lawfirm_aboutchooseus_section_nonce' ); ?>
+            
+            <div style="background: #fff; padding: 20px; margin: 20px 0; border: 1px solid #ccd0d4; box-shadow: 0 1px 1px rgba(0,0,0,.04);">
+                <h2 style="margin-top: 0; padding-bottom: 10px; border-bottom: 1px solid #ddd;">Section Header</h2>
+                
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><label for="aboutchooseus_title">Title</label></th>
+                        <td>
+                            <input type="text" id="aboutchooseus_title" name="aboutchooseus_title" value="<?php echo esc_attr( $title ); ?>" class="regular-text" style="width: 100%; max-width: 600px;" />
+                            <p class="description">You can use HTML like: Why Choose &lt;span class="text-[#26cf71]"&gt;Genius Law&lt;/span&gt;</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="aboutchooseus_subtitle">Subtitle</label></th>
+                        <td>
+                            <input type="text" id="aboutchooseus_subtitle" name="aboutchooseus_subtitle" value="<?php echo esc_attr( $subtitle ); ?>" class="regular-text" style="width: 100%; max-width: 600px;" />
+                        </td>
+                    </tr>
+                </table>
+                
+                <?php for ($i = 1; $i <= 6; $i++): ?>
+                <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+                <h2 style="margin-top: 0; padding-bottom: 10px; border-bottom: 1px solid #ddd;">Reason <?php echo $i; ?></h2>
+                
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><label for="aboutchooseus_<?php echo $i; ?>_title">Title</label></th>
+                        <td><input type="text" id="aboutchooseus_<?php echo $i; ?>_title" name="aboutchooseus_<?php echo $i; ?>_title" value="<?php echo esc_attr( $reasons[$i]['title'] ); ?>" class="regular-text" /></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="aboutchooseus_<?php echo $i; ?>_desc">Description</label></th>
+                        <td><textarea id="aboutchooseus_<?php echo $i; ?>_desc" name="aboutchooseus_<?php echo $i; ?>_desc" rows="2" class="large-text" style="width: 100%; max-width: 600px;"><?php echo esc_textarea( $reasons[$i]['desc'] ); ?></textarea></td>
+                    </tr>
+                </table>
+                <?php endfor; ?>
+            </div>
+            
+            <?php submit_button( __( 'Save About Choose Us Section', 'lawfirm-pro' ) ); ?>
+        </form>
+    </div>
+    <?php
+}
+
+/**
+ * Save About Choose Us Section settings
+ */
+function lawfirm_pro_save_aboutchooseus_section() {
+    if ( isset( $_POST['aboutchooseus_title'] ) ) {
+        set_theme_mod( 'aboutchooseus_title', wp_kses_post( wp_unslash( $_POST['aboutchooseus_title'] ) ) );
+    }
+    if ( isset( $_POST['aboutchooseus_subtitle'] ) ) {
+        set_theme_mod( 'aboutchooseus_subtitle', sanitize_text_field( wp_unslash( $_POST['aboutchooseus_subtitle'] ) ) );
+    }
+    
+    for ($i = 1; $i <= 6; $i++) {
+        if ( isset( $_POST["aboutchooseus_{$i}_title"] ) ) {
+            set_theme_mod( "aboutchooseus_{$i}_title", sanitize_text_field( wp_unslash( $_POST["aboutchooseus_{$i}_title"] ) ) );
+        }
+        if ( isset( $_POST["aboutchooseus_{$i}_desc"] ) ) {
+            set_theme_mod( "aboutchooseus_{$i}_desc", sanitize_textarea_field( wp_unslash( $_POST["aboutchooseus_{$i}_desc"] ) ) );
+        }
+    }
+}

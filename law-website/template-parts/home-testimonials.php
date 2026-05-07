@@ -55,9 +55,9 @@ if ( ! is_array( $testimonials_items ) || empty( $testimonials_items ) ) {
 
 // Get section content
 $testimonials_title = get_theme_mod( 'lawfirm_testimonials_title', 'See what our clients say about us' );
-$testimonials_description = get_theme_mod( 'lawfirm_testimonials_description', 'Genius Law and Associates is your trusted legal partner with over 15 years of professional experience. We offer comprehensive legal solutions for individuals and businesses, allowing you to focus on what matters most while we handle your legal matters.' );
+$testimonials_description = get_theme_mod( 'lawfirm_testimonials_description', 'Genius Law and Associates is your trusted legal partner with over 25 years of professional experience. We offer comprehensive legal solutions for individuals and businesses, allowing you to focus on what matters most while we handle your legal matters.' );
 $testimonials_description_2 = get_theme_mod( 'lawfirm_testimonials_description_2', 'We provide a wide range of legal services including family law, corporate law, criminal defense, property disputes, immigration law, contract drafting, employment law, and many more practice areas to serve all your legal needs.' );
-$testimonials_video_url = get_theme_mod( 'lawfirm_testimonials_video_url', 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=800' );
+$testimonials_video_url = get_theme_mod( 'lawfirm_testimonials_video_url', 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800' );
 ?>
 
 <div class="bg-white w-full py-16 px-6">

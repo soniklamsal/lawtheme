@@ -48,6 +48,44 @@ if ( class_exists( 'WP_Customize_Control' ) ) {
     }
     
     /* =========================================
+       Custom HTML Control for Location Map Instructions
+    ========================================= */
+    class LawFirm_Pro_Custom_HTML_Control extends WP_Customize_Control {
+        public $type = 'custom_html';
+
+        public function render_content() {
+            ?>
+            <label>
+                <?php if ( ! empty( $this->label ) ) : ?>
+                    <span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
+                <?php endif; ?>
+            </label>
+            
+            <div style="background: #f0f0f1; padding: 15px; border-radius: 4px; margin: 10px 0;">
+                <p style="margin: 0 0 10px 0; font-size: 13px; line-height: 1.6;">
+                    <strong>Option 1: Use Default Location</strong><br>
+                    Click the button below to load Genius Law and Associates location.
+                </p>
+                <button type="button" id="use-default-map-btn" class="button button-primary" style="width: 100%; margin-bottom: 15px;">
+                    Use Default Map (Genius Law Location)
+                </button>
+                
+                <p style="margin: 10px 0; font-size: 13px; line-height: 1.6; border-top: 1px solid #ddd; padding-top: 15px;">
+                    <strong>Option 2: Use Custom Location</strong><br>
+                    Type your address or location name and click Search, then click on the map to set your exact location.
+                </p>
+                <a href="https://www.google.com/maps" target="_blank" class="button button-secondary" style="width: 100%;">
+                    Open Google Maps to Get Embed Code
+                </a>
+                <p style="margin: 10px 0 0 0; font-size: 12px; color: #666; line-height: 1.5;">
+                    <em>Instructions:</em> Search your location → Click "Share" → Click "Embed a map" → Copy the iframe code → Paste it in the "Google Maps Embed Code" field above.
+                </p>
+            </div>
+            <?php
+        }
+    }
+    
+    /* =========================================
        Custom FAQ Repeater Control
     ========================================= */
     class LawFirm_Pro_FAQ_Repeater_Control extends WP_Customize_Control {
@@ -435,3 +473,260 @@ function lawfirm_pro_logo_css() {
     <?php
 }
 add_action( 'wp_head', 'lawfirm_pro_logo_css' );
+
+
+/* =========================================
+   FOOTER SOCIAL MEDIA SECTION
+========================================= */
+function lawfirm_pro_footer_social_customize_register( $wp_customize ) {
+    
+    // Add Footer Section
+    $wp_customize->add_section( 'footer_social_section', array(
+        'title'       => esc_html__( 'Footer Social Media', 'lawfirm-pro' ),
+        'description' => esc_html__( 'Manage social media links in footer', 'lawfirm-pro' ),
+        'priority'    => 120,
+    ) );
+
+    // Twitter/X
+    $wp_customize->add_setting( 'footer_twitter_enable', array(
+        'default'           => true,
+        'sanitize_callback' => 'rest_sanitize_boolean',
+    ) );
+    $wp_customize->add_control( 'footer_twitter_enable', array(
+        'label'   => esc_html__( 'Enable Twitter/X', 'lawfirm-pro' ),
+        'section' => 'footer_social_section',
+        'type'    => 'checkbox',
+    ) );
+    
+    $wp_customize->add_setting( 'footer_twitter_url', array(
+        'default'           => 'https://twitter.com',
+        'sanitize_callback' => 'esc_url_raw',
+    ) );
+    $wp_customize->add_control( 'footer_twitter_url', array(
+        'label'   => esc_html__( 'Twitter/X URL', 'lawfirm-pro' ),
+        'section' => 'footer_social_section',
+        'type'    => 'url',
+    ) );
+
+    // Facebook
+    $wp_customize->add_setting( 'footer_facebook_enable', array(
+        'default'           => true,
+        'sanitize_callback' => 'rest_sanitize_boolean',
+    ) );
+    $wp_customize->add_control( 'footer_facebook_enable', array(
+        'label'   => esc_html__( 'Enable Facebook', 'lawfirm-pro' ),
+        'section' => 'footer_social_section',
+        'type'    => 'checkbox',
+    ) );
+    
+    $wp_customize->add_setting( 'footer_facebook_url', array(
+        'default'           => 'https://facebook.com',
+        'sanitize_callback' => 'esc_url_raw',
+    ) );
+    $wp_customize->add_control( 'footer_facebook_url', array(
+        'label'   => esc_html__( 'Facebook URL', 'lawfirm-pro' ),
+        'section' => 'footer_social_section',
+        'type'    => 'url',
+    ) );
+
+    // YouTube
+    $wp_customize->add_setting( 'footer_youtube_enable', array(
+        'default'           => true,
+        'sanitize_callback' => 'rest_sanitize_boolean',
+    ) );
+    $wp_customize->add_control( 'footer_youtube_enable', array(
+        'label'   => esc_html__( 'Enable YouTube', 'lawfirm-pro' ),
+        'section' => 'footer_social_section',
+        'type'    => 'checkbox',
+    ) );
+    
+    $wp_customize->add_setting( 'footer_youtube_url', array(
+        'default'           => 'https://youtube.com',
+        'sanitize_callback' => 'esc_url_raw',
+    ) );
+    $wp_customize->add_control( 'footer_youtube_url', array(
+        'label'   => esc_html__( 'YouTube URL', 'lawfirm-pro' ),
+        'section' => 'footer_social_section',
+        'type'    => 'url',
+    ) );
+
+    // LinkedIn
+    $wp_customize->add_setting( 'footer_linkedin_enable', array(
+        'default'           => true,
+        'sanitize_callback' => 'rest_sanitize_boolean',
+    ) );
+    $wp_customize->add_control( 'footer_linkedin_enable', array(
+        'label'   => esc_html__( 'Enable LinkedIn', 'lawfirm-pro' ),
+        'section' => 'footer_social_section',
+        'type'    => 'checkbox',
+    ) );
+    
+    $wp_customize->add_setting( 'footer_linkedin_url', array(
+        'default'           => 'https://linkedin.com',
+        'sanitize_callback' => 'esc_url_raw',
+    ) );
+    $wp_customize->add_control( 'footer_linkedin_url', array(
+        'label'   => esc_html__( 'LinkedIn URL', 'lawfirm-pro' ),
+        'section' => 'footer_social_section',
+        'type'    => 'url',
+    ) );
+
+    // Instagram
+    $wp_customize->add_setting( 'footer_instagram_enable', array(
+        'default'           => true,
+        'sanitize_callback' => 'rest_sanitize_boolean',
+    ) );
+    $wp_customize->add_control( 'footer_instagram_enable', array(
+        'label'   => esc_html__( 'Enable Instagram', 'lawfirm-pro' ),
+        'section' => 'footer_social_section',
+        'type'    => 'checkbox',
+    ) );
+    
+    $wp_customize->add_setting( 'footer_instagram_url', array(
+        'default'           => 'https://instagram.com',
+        'sanitize_callback' => 'esc_url_raw',
+    ) );
+    $wp_customize->add_control( 'footer_instagram_url', array(
+        'label'   => esc_html__( 'Instagram URL', 'lawfirm-pro' ),
+        'section' => 'footer_social_section',
+        'type'    => 'url',
+    ) );
+}
+add_action( 'customize_register', 'lawfirm_pro_footer_social_customize_register' );
+
+
+/* =========================================
+   LOCATION/MAP SECTION
+========================================= */
+function lawfirm_pro_location_map_customize_register( $wp_customize ) {
+    
+    // Add Location/Map Section
+    $wp_customize->add_section( 'location_map_section', array(
+        'title'       => esc_html__( 'Location/Map Section', 'lawfirm-pro' ),
+        'description' => esc_html__( 'Manage Google Maps embed code for your location', 'lawfirm-pro' ),
+        'priority'    => 125,
+    ) );
+
+    // Enable/Disable Map
+    $wp_customize->add_setting( 'location_map_enable', array(
+        'default'           => true,
+        'sanitize_callback' => 'rest_sanitize_boolean',
+    ) );
+    $wp_customize->add_control( 'location_map_enable', array(
+        'label'       => esc_html__( 'Enable Location Map', 'lawfirm-pro' ),
+        'description' => esc_html__( 'Show/hide the location map on your website', 'lawfirm-pro' ),
+        'section'     => 'location_map_section',
+        'type'        => 'checkbox',
+    ) );
+
+    // Map Iframe Code
+    $wp_customize->add_setting( 'location_map_iframe', array(
+        'default'           => '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4347.103267097102!2d85.33760347611336!3d27.689982226255896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19005abd0c41%3A0xaf0808f7ef57c1a5!2sGenius%20Law%20and%20Associates!5e1!3m2!1sen!2snp!4v1775798509450!5m2!1sen!2snp" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>',
+        'sanitize_callback' => 'lawfirm_pro_sanitize_iframe',
+    ) );
+    $wp_customize->add_control( 'location_map_iframe', array(
+        'label'       => esc_html__( 'Google Maps Embed Code', 'lawfirm-pro' ),
+        'description' => esc_html__( 'Paste your Google Maps iframe embed code here. Click "Use Default Map" button below to load Genius Law location.', 'lawfirm-pro' ),
+        'section'     => 'location_map_section',
+        'type'        => 'textarea',
+        'input_attrs' => array(
+            'rows' => 6,
+            'placeholder' => '<iframe src="..." width="100%" height="450" ...></iframe>',
+        ),
+    ) );
+
+    // Add custom HTML control with instructions and button
+    $wp_customize->add_setting( 'location_map_instructions', array(
+        'default'           => '',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    
+    $wp_customize->add_control( new LawFirm_Pro_Custom_HTML_Control(
+        $wp_customize,
+        'location_map_instructions',
+        array(
+            'label'       => esc_html__( 'Quick Setup', 'lawfirm-pro' ),
+            'section'     => 'location_map_section',
+            'description' => '',
+        )
+    ) );
+
+    // Map Section Title
+    $wp_customize->add_setting( 'location_map_title', array(
+        'default'           => 'Our Location',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'location_map_title', array(
+        'label'   => esc_html__( 'Map Section Title', 'lawfirm-pro' ),
+        'section' => 'location_map_section',
+        'type'    => 'text',
+    ) );
+
+    // Map Section Description
+    $wp_customize->add_setting( 'location_map_description', array(
+        'default'           => 'Visit us at our office location',
+        'sanitize_callback' => 'sanitize_textarea_field',
+    ) );
+    $wp_customize->add_control( 'location_map_description', array(
+        'label'   => esc_html__( 'Map Section Description', 'lawfirm-pro' ),
+        'section' => 'location_map_section',
+        'type'    => 'textarea',
+    ) );
+}
+add_action( 'customize_register', 'lawfirm_pro_location_map_customize_register' );
+
+/* =========================================
+   Sanitize iframe code
+========================================= */
+function lawfirm_pro_sanitize_iframe( $input ) {
+    // Allow iframe tags with specific attributes
+    $allowed_html = array(
+        'iframe' => array(
+            'src'                   => true,
+            'width'                 => true,
+            'height'                => true,
+            'style'                 => true,
+            'allowfullscreen'       => true,
+            'loading'               => true,
+            'referrerpolicy'        => true,
+            'frameborder'           => true,
+            'allow'                 => true,
+        ),
+    );
+    return wp_kses( $input, $allowed_html );
+}
+
+/* =========================================
+   Add JavaScript for Default Map Button
+========================================= */
+function lawfirm_pro_customizer_scripts() {
+    ?>
+    <script type="text/javascript">
+    (function($) {
+        wp.customize.bind('ready', function() {
+            // Handle "Use Default Map" button click
+            $(document).on('click', '#use-default-map-btn', function(e) {
+                e.preventDefault();
+                
+                // Default Genius Law and Associates map iframe
+                var defaultMapIframe = '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4347.103267097102!2d85.33760347611336!3d27.689982226255896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19005abd0c41%3A0xaf0808f7ef57c1a5!2sGenius%20Law%20and%20Associates!5e1!3m2!1sen!2snp!4v1775798509450!5m2!1sen!2snp" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
+                
+                // Set the value in the customizer
+                wp.customize('location_map_iframe').set(defaultMapIframe);
+                
+                // Change button text temporarily
+                var $btn = $(this);
+                var originalText = $btn.text();
+                $btn.text('✓ Default Map Loaded!').css('background-color', '#46b450');
+                
+                // Reset button after 2 seconds
+                setTimeout(function() {
+                    $btn.text(originalText).css('background-color', '');
+                }, 2000);
+            });
+        });
+    })(jQuery);
+    </script>
+    <?php
+}
+add_action( 'customize_controls_print_footer_scripts', 'lawfirm_pro_customizer_scripts' );

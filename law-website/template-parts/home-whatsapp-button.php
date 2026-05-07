@@ -5,11 +5,22 @@
  * @package LawFirm_Pro
  */
 
+// Check if WhatsApp button is enabled
+$whatsapp_enabled = get_theme_mod( 'whatsapp_enabled', true );
+
+if ( ! $whatsapp_enabled ) {
+    return; // Don't show the button if disabled
+}
+
 $whatsapp_number = get_theme_mod( 'whatsapp_number', '9779842416371' );
+$whatsapp_message = get_theme_mod( 'whatsapp_message', 'Hello, I need legal consultation' );
+
+// URL encode the message
+$encoded_message = urlencode( $whatsapp_message );
 ?>
 
 <a 
-    href="https://wa.me/<?php echo esc_attr( $whatsapp_number ); ?>?text=Hello%2C%20I%20need%20legal%20consultation" 
+    href="https://wa.me/<?php echo esc_attr( $whatsapp_number ); ?>?text=<?php echo esc_attr( $encoded_message ); ?>" 
     target="_blank" 
     rel="noopener noreferrer"
     class="whatsapp-float fixed bottom-6 right-6 z-50 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-[#20BA5A] transition-all duration-300 hover:scale-110"

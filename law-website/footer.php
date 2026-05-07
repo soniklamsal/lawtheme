@@ -14,28 +14,49 @@
             </svg>
         </div>
 
-        <div class="max-w-6xl py-10 px-4 sm:px-6 text-gray-800 sm:flex justify-between mx-auto pt-20">            <div class="p-5 sm:w-2/12 border-r">
+        <div class="max-w-6xl py-10 px-4 sm:px-6 text-gray-800 sm:flex justify-between mx-auto pt-20">
+            <div class="p-5 sm:w-2/12 border-r">
                 <div class="text-sm uppercase text-[#26cf71] font-bold">Menu</div>
                 <ul>
-                    <li class="my-2">
-                        <a class="hover:text-[#26cf71]" href="#home">Home</a>
-                    </li>
-                    <li class="my-2">
-                        <a class="hover:text-[#26cf71]" href="#services">Services</a>
-                    </li>
-                    <li class="my-2">
-                        <a class="hover:text-[#26cf71]" href="#about">About</a>
-                    </li>
-                    <li class="my-2">
-                        <a class="hover:text-[#26cf71]" href="#contact">Contact</a>
-                    </li>
+                    <?php
+                    $footer_menu_items = get_theme_mod( 'lawfirm_footer_menu_items', '' );
+                    if ( ! empty( $footer_menu_items ) && is_string( $footer_menu_items ) ) {
+                        $footer_menu_items = json_decode( $footer_menu_items, true );
+                    }
+                    
+                    // Fallback to default menu if no dynamic menu exists
+                    if ( ! is_array( $footer_menu_items ) || empty( $footer_menu_items ) ) {
+                        $footer_menu_items = array(
+                            array( 'text' => 'Home', 'link' => home_url( '/' ) ),
+                            array( 'text' => 'Services', 'link' => home_url( '/services' ) ),
+                            array( 'text' => 'About', 'link' => home_url( '/about' ) ),
+                            array( 'text' => 'Contact', 'link' => home_url( '/contact' ) ),
+                        );
+                    }
+                    
+                    foreach ( $footer_menu_items as $menu_item ) :
+                        if ( ! empty( $menu_item['text'] ) ) :
+                            // Convert relative URLs to full URLs
+                            $menu_link = $menu_item['link'];
+                            if ( ! empty( $menu_link ) && ! filter_var( $menu_link, FILTER_VALIDATE_URL ) && strpos( $menu_link, '#' ) !== 0 ) {
+                                // If it's not a full URL and not an anchor link, make it a full URL
+                                $menu_link = home_url( $menu_link );
+                            }
+                    ?>
+                        <li class="my-2">
+                            <a class="hover:text-[#26cf71]" href="<?php echo esc_url( $menu_link ); ?>"><?php echo esc_html( $menu_item['text'] ); ?></a>
+                        </li>
+                    <?php 
+                        endif;
+                    endforeach; 
+                    ?>
                 </ul>
             </div>
 
             <div class="p-5 sm:w-7/12 border-r text-center">
-                <h3 class="font-bold text-xl text-[#26cf71] mb-4">Genius Law and Associates</h3>
+                <h3 class="font-bold text-xl text-[#26cf71] mb-4"><?php echo esc_html( get_theme_mod( 'lawfirm_footer_company_name', 'Genius Law and Associates' ) ); ?></h3>
                 <p class="text-gray-500 text-sm mb-10">
-                    Your trusted legal partner with over 15 years of professional experience. We offer comprehensive legal solutions for individuals and businesses including family law, corporate law, criminal defense, property disputes, immigration law, and many more specialized legal services.
+                    <?php echo esc_html( get_theme_mod( 'lawfirm_footer_company_description', 'Your trusted legal partner with over 25 years of professional experience. We offer comprehensive legal solutions for individuals and businesses including family law, corporate law, criminal defense, property disputes, immigration law, and many more specialized legal services.' ) ); ?>
                 </p>
             </div>
 
@@ -43,27 +64,27 @@
                 <div class="text-sm uppercase text-[#26cf71] font-bold mb-3">Contact Us</div>
                 <ul class="space-y-2">
                     <li class="my-2">
-                        <a class="hover:text-[#26cf71] text-sm" href="#">Kathmandu, Nepal</a>
+                        <a class="hover:text-[#26cf71] text-sm" href="#"><?php echo esc_html( get_theme_mod( 'lawfirm_footer_address', 'Kathmandu, Nepal' ) ); ?></a>
                     </li>
                     <li class="my-2">
                         <div class="text-sm">
                             <div class="mb-1"><span class="font-semibold">Phone:</span></div>
-                            <a class="hover:text-[#26cf71] block" href="tel:+97714497707">+977-1-4497707</a>
-                            <a class="hover:text-[#26cf71] block" href="tel:+97714472741">+977-1-4472741</a>
+                            <a class="hover:text-[#26cf71] block" href="tel:<?php echo esc_attr( str_replace( array( '-', ' ' ), '', get_theme_mod( 'lawfirm_footer_phone_1', '+977-1-4497707' ) ) ); ?>"><?php echo esc_html( get_theme_mod( 'lawfirm_footer_phone_1', '+977-1-4497707' ) ); ?></a>
+                            <a class="hover:text-[#26cf71] block" href="tel:<?php echo esc_attr( str_replace( array( '-', ' ' ), '', get_theme_mod( 'lawfirm_footer_phone_2', '+977-1-4472741' ) ) ); ?>"><?php echo esc_html( get_theme_mod( 'lawfirm_footer_phone_2', '+977-1-4472741' ) ); ?></a>
                         </div>
                     </li>
                     <li class="my-2">
                         <div class="text-sm">
                             <div class="mb-1"><span class="font-semibold">Cell:</span></div>
-                            <a class="hover:text-[#26cf71] block" href="tel:+9779851063500">+977-9851063500</a>
-                            <a class="hover:text-[#26cf71] block" href="tel:+9779741141964">+977-9741141964</a>
+                            <a class="hover:text-[#26cf71] block" href="tel:<?php echo esc_attr( str_replace( array( '-', ' ' ), '', get_theme_mod( 'lawfirm_footer_cell_1', '+977-9851063500' ) ) ); ?>"><?php echo esc_html( get_theme_mod( 'lawfirm_footer_cell_1', '+977-9851063500' ) ); ?></a>
+                            <a class="hover:text-[#26cf71] block" href="tel:<?php echo esc_attr( str_replace( array( '-', ' ' ), '', get_theme_mod( 'lawfirm_footer_cell_2', '+977-9741141964' ) ) ); ?>"><?php echo esc_html( get_theme_mod( 'lawfirm_footer_cell_2', '+977-9741141964' ) ); ?></a>
                         </div>
                     </li>
                     <li class="my-2">
                         <div class="text-sm">
                             <div class="mb-1"><span class="font-semibold">E-mail:</span></div>
-                            <a class="hover:text-[#26cf71] block break-all" href="mailto:genilawasso@gmail.com">genilawasso@gmail.com</a>
-                            <a class="hover:text-[#26cf71] block break-all" href="mailto:gyanrshakya@gmail.com">gyanrshakya@gmail.com</a>
+                            <a class="hover:text-[#26cf71] block break-all" href="mailto:<?php echo esc_attr( get_theme_mod( 'lawfirm_footer_email_1', 'genilawasso@gmail.com' ) ); ?>"><?php echo esc_html( get_theme_mod( 'lawfirm_footer_email_1', 'genilawasso@gmail.com' ) ); ?></a>
+                            <a class="hover:text-[#26cf71] block break-all" href="mailto:<?php echo esc_attr( get_theme_mod( 'lawfirm_footer_email_2', 'gyanrshakya@gmail.com' ) ); ?>"><?php echo esc_html( get_theme_mod( 'lawfirm_footer_email_2', 'gyanrshakya@gmail.com' ) ); ?></a>
                         </div>
                     </li>
                 </ul>
@@ -72,17 +93,45 @@
 
         <div class="flex py-5 m-auto text-gray-800 text-sm flex-col items-center border-t max-w-6xl">
             <div class="md:flex-auto md:flex-row-reverse mt-2 flex-row flex">
-                <a href="#" class="w-6 mx-1">
+                <?php 
+                // Get social media settings from customizer with enable/disable checkboxes
+                $twitter_enabled = get_theme_mod( 'footer_twitter_enable', true );
+                $twitter_url = get_theme_mod( 'footer_twitter_url', 'https://twitter.com' );
+                
+                $facebook_enabled = get_theme_mod( 'footer_facebook_enable', true );
+                $facebook_url = get_theme_mod( 'footer_facebook_url', 'https://facebook.com' );
+                
+                $youtube_enabled = get_theme_mod( 'footer_youtube_enable', true );
+                $youtube_url = get_theme_mod( 'footer_youtube_url', 'https://youtube.com' );
+                
+                $linkedin_enabled = get_theme_mod( 'footer_linkedin_enable', true );
+                $linkedin_url = get_theme_mod( 'footer_linkedin_url', 'https://linkedin.com' );
+                
+                $instagram_enabled = get_theme_mod( 'footer_instagram_enable', true );
+                $instagram_url = get_theme_mod( 'footer_instagram_url', 'https://instagram.com' );
+                ?>
+                
+                <?php if ( $twitter_enabled && ! empty( $twitter_url ) ) : ?>
+                <!-- Twitter/X -->
+                <a href="<?php echo esc_url( $twitter_url ); ?>" class="w-6 mx-1" target="_blank" rel="noopener noreferrer">
                     <svg class="fill-current cursor-pointer text-gray-500 hover:text-[#26cf71]" width="100%" height="100%" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2">
                         <path id="Twitter" d="M24,12c0,6.627 -5.373,12 -12,12c-6.627,0 -12,-5.373 -12,-12c0,-6.627 5.373,-12 12,-12c6.627,0 12,5.373 12,12Zm-6.465,-3.192c-0.379,0.168 -0.786,0.281 -1.213,0.333c0.436,-0.262 0.771,-0.676 0.929,-1.169c-0.408,0.242 -0.86,0.418 -1.341,0.513c-0.385,-0.411 -0.934,-0.667 -1.541,-0.667c-1.167,0 -2.112,0.945 -2.112,2.111c0,0.166 0.018,0.327 0.054,0.482c-1.754,-0.088 -3.31,-0.929 -4.352,-2.206c-0.181,0.311 -0.286,0.674 -0.286,1.061c0,0.733 0.373,1.379 0.94,1.757c-0.346,-0.01 -0.672,-0.106 -0.956,-0.264c-0.001,0.009 -0.001,0.018 -0.001,0.027c0,1.023 0.728,1.877 1.694,2.07c-0.177,0.049 -0.364,0.075 -0.556,0.075c-0.137,0 -0.269,-0.014 -0.397,-0.038c0.268,0.838 1.048,1.449 1.972,1.466c-0.723,0.566 -1.633,0.904 -2.622,0.904c-0.171,0 -0.339,-0.01 -0.504,-0.03c0.934,0.599 2.044,0.949 3.237,0.949c3.883,0 6.007,-3.217 6.007,-6.008c0,-0.091 -0.002,-0.183 -0.006,-0.273c0.413,-0.298 0.771,-0.67 1.054,-1.093Z"></path>
                     </svg>
                 </a>
-                <a href="#" class="w-6 mx-1">
+                <?php endif; ?>
+                
+                <?php if ( $facebook_enabled && ! empty( $facebook_url ) ) : ?>
+                <!-- Facebook -->
+                <a href="<?php echo esc_url( $facebook_url ); ?>" class="w-6 mx-1" target="_blank" rel="noopener noreferrer">
                     <svg class="fill-current cursor-pointer text-gray-500 hover:text-[#26cf71]" width="100%" height="100%" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2">
                         <path id="Facebook" d="M24,12c0,6.627 -5.373,12 -12,12c-6.627,0 -12,-5.373 -12,-12c0,-6.627 5.373,-12 12,-12c6.627,0 12,5.373 12,12Zm-11.278,0l1.294,0l0.172,-1.617l-1.466,0l0.002,-0.808c0,-0.422 0.04,-0.648 0.646,-0.648l0.809,0l0,-1.616l-1.295,0c-1.555,0 -2.103,0.784 -2.103,2.102l0,0.97l-0.969,0l0,1.617l0.969,0l0,4.689l1.941,0l0,-4.689Z"></path>
                     </svg>
                 </a>
-                <a href="#" class="w-6 mx-1">
+                <?php endif; ?>
+                
+                <?php if ( $youtube_enabled && ! empty( $youtube_url ) ) : ?>
+                <!-- YouTube -->
+                <a href="<?php echo esc_url( $youtube_url ); ?>" class="w-6 mx-1" target="_blank" rel="noopener noreferrer">
                     <svg class="fill-current cursor-pointer text-gray-500 hover:text-[#26cf71]" width="100%" height="100%" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2">
                         <g id="Layer_1">
                             <circle id="Oval" cx="12" cy="12" r="12"></circle>
@@ -90,13 +139,34 @@
                         </g>
                     </svg>
                 </a>
-                <a href="#" class="w-6 mx-1">
+                <?php endif; ?>
+                
+                <?php if ( $linkedin_enabled && ! empty( $linkedin_url ) ) : ?>
+                <!-- LinkedIn -->
+                <a href="<?php echo esc_url( $linkedin_url ); ?>" class="w-6 mx-1" target="_blank" rel="noopener noreferrer">
                     <svg class="fill-current cursor-pointer text-gray-500 hover:text-[#26cf71]" width="100%" height="100%" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2">
                         <path id="Shape" d="M7.3,0.9c1.5,-0.6 3.1,-0.9 4.7,-0.9c1.6,0 3.2,0.3 4.7,0.9c1.5,0.6 2.8,1.5 3.8,2.6c1,1.1 1.9,2.3 2.6,3.8c0.7,1.5 0.9,3 0.9,4.7c0,1.7 -0.3,3.2 -0.9,4.7c-0.6,1.5 -1.5,2.8 -2.6,3.8c-1.1,1 -2.3,1.9 -3.8,2.6c-1.5,0.7 -3.1,0.9 -4.7,0.9c-1.6,0 -3.2,-0.3 -4.7,-0.9c-1.5,-0.6 -2.8,-1.5 -3.8,-2.6c-1,-1.1 -1.9,-2.3 -2.6,-3.8c-0.7,-1.5 -0.9,-3.1 -0.9,-4.7c0,-1.6 0.3,-3.2 0.9,-4.7c0.6,-1.5 1.5,-2.8 2.6,-3.8c1.1,-1 2.3,-1.9 3.8,-2.6Zm-0.3,7.1c0.6,0 1.1,-0.2 1.5,-0.5c0.4,-0.3 0.5,-0.8 0.5,-1.3c0,-0.5 -0.2,-0.9 -0.6,-1.2c-0.4,-0.3 -0.8,-0.5 -1.4,-0.5c-0.6,0 -1.1,0.2 -1.4,0.5c-0.3,0.3 -0.6,0.7 -0.6,1.2c0,0.5 0.2,0.9 0.5,1.3c0.3,0.4 0.9,0.5 1.5,0.5Zm1.5,10l0,-8.5l-3,0l0,8.5l3,0Zm11,0l0,-4.5c0,-1.4 -0.3,-2.5 -0.9,-3.3c-0.6,-0.8 -1.5,-1.2 -2.6,-1.2c-0.6,0 -1.1,0.2 -1.5,0.5c-0.4,0.3 -0.8,0.8 -0.9,1.3l-0.1,-1.3l-3,0l0.1,2l0,6.5l3,0l0,-4.5c0,-0.6 0.1,-1.1 0.4,-1.5c0.3,-0.4 0.6,-0.5 1.1,-0.5c0.5,0 0.9,0.2 1.1,0.5c0.2,0.3 0.4,0.8 0.4,1.5l0,4.5l2.9,0Z"></path>
                     </svg>
                 </a>
+                <?php endif; ?>
+                
+                <?php if ( $instagram_enabled && ! empty( $instagram_url ) ) : ?>
+                <!-- Instagram -->
+                <a href="<?php echo esc_url( $instagram_url ); ?>" class="w-6 mx-1" target="_blank" rel="noopener noreferrer">
+                    <svg class="fill-current cursor-pointer text-gray-500 hover:text-[#26cf71]" width="100%" height="100%" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                </a>
+                <?php endif; ?>
             </div>
-            <div class="my-5">© Copyright 2024. All Rights Reserved.</div>
+            <div class="my-5">
+                <?php 
+                // Get copyright text from theme customizer (editable from admin)
+                $copyright_text = get_theme_mod( 'lawfirm_footer_copyright', '© Copyright 2024. All Rights Reserved. Genius Law & Associates. Developed by BlueWribbon.' );
+                
+                echo esc_html( $copyright_text );
+                ?>
+            </div>
         </div>
     </div>
 

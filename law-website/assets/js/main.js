@@ -100,28 +100,41 @@
             });
         });
         
-        // Header scroll effect (only on homepage)
-        const isHomePage = document.body.classList.contains('home') || document.body.classList.contains('page-template-default');
+        // Header scroll effect (works on all pages)
+        const header = document.getElementById('masthead');
+        const isHomePage = document.body.classList.contains('home') || 
+                          document.body.classList.contains('front-page') || 
+                          window.location.pathname === '/';
         
-        if (isHomePage) {
-            const header = document.getElementById('masthead');
-            
-            // Add transparent class initially
-            if (header && window.pageYOffset === 0) {
-                header.classList.add('navbar-transparent');
-            }
-            
-            window.addEventListener('scroll', function() {
-                if (header) {
-                    if (window.pageYOffset > 50) {
+        if (header) {
+            // Function to update header based on scroll
+            function updateHeader() {
+                const scrolled = window.pageYOffset > 50;
+                
+                if (isHomePage) {
+                    // Homepage: transparent to white
+                    if (scrolled) {
                         header.classList.add('navbar-scrolled');
                         header.classList.remove('navbar-transparent');
                     } else {
                         header.classList.remove('navbar-scrolled');
                         header.classList.add('navbar-transparent');
                     }
+                } else {
+                    // Other pages: always white
+                    header.classList.add('navbar-scrolled');
+                    header.classList.remove('navbar-transparent');
                 }
-            });
+            }
+            
+            // Initial setup
+            updateHeader();
+            
+            // Listen for scroll events
+            window.addEventListener('scroll', updateHeader);
+            
+            // Also listen for page load to ensure proper state
+            window.addEventListener('load', updateHeader);
         }
     });
     

@@ -7,49 +7,60 @@
 
 get_header();
 
-// Attorney team data
-$attorneys = array(
-    array(
-        'name' => 'राजेश शर्मा',
-        'specialty' => 'Civil Rights Law',
-        'description' => 'Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris fusce nec.',
-        'image' => 'https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=400',
-        'twitter' => '#',
-        'facebook' => '#',
-        'instagram' => '#',
-        'linkedin' => '#',
-    ),
-    array(
-        'name' => 'सरिता गुरुङ',
-        'specialty' => 'Commercial Law',
-        'description' => 'Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris fusce nec.',
-        'image' => 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400',
-        'twitter' => '#',
-        'facebook' => '#',
-        'instagram' => '#',
-        'linkedin' => '#',
-    ),
-    array(
-        'name' => 'अमित थापा',
-        'specialty' => 'Corporate Law',
-        'description' => 'Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris fusce nec.',
-        'image' => 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400',
-        'twitter' => '#',
-        'facebook' => '#',
-        'instagram' => '#',
-        'linkedin' => '#',
-    ),
-    array(
-        'name' => 'प्रिया श्रेष्ठ',
-        'specialty' => 'Criminal Law',
-        'description' => 'Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris fusce nec.',
-        'image' => 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400',
-        'twitter' => '#',
-        'facebook' => '#',
-        'instagram' => '#',
-        'linkedin' => '#',
-    ),
-);
+// Get dynamic team data from customizer
+$team_title = get_theme_mod( 'lawfirm_team_title', 'Meet Our <span class="text-[#26cf71]">Legal Team</span>' );
+$team_subtitle = get_theme_mod( 'lawfirm_team_subtitle', 'Experienced attorneys dedicated to protecting your rights' );
+
+$team_members = get_theme_mod( 'lawfirm_team_members', '' );
+if ( ! empty( $team_members ) && is_string( $team_members ) ) {
+    $team_members = json_decode( $team_members, true );
+}
+
+// Fallback to default data if no dynamic data exists
+if ( ! is_array( $team_members ) || empty( $team_members ) ) {
+    $team_members = array(
+        array(
+            'name' => 'Advocate: Gyan R Shakya',
+            'specialty' => '',
+            'description' => 'Experienced Stakeholders/Shareholders with a demonstrated History of working and Management in the Legal services industry and Banking. Expertise / Skilled in Negotiation, Meditation, Liquidation and Arbitrations. Analytical skills of Consumers Relations Management(CRM) and Administration Strong Professional with Corporate and Banking Law practice.',
+            'image' => 'https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=400',
+            'twitter' => '#',
+            'facebook' => '#',
+            'instagram' => '#',
+            'linkedin' => '#',
+        ),
+        array(
+            'name' => 'सरिता गुरुङ',
+            'specialty' => '',
+            'description' => 'Experienced Legal Professional with demonstrated expertise in Family Law, Civil Litigation, and Property Disputes. Skilled in Legal Research, Client Counseling, Case Management, and Court Representation. Strong analytical skills in Alternative Dispute Resolution (ADR) and Mediation. Dedicated advocate with comprehensive knowledge of Family Law practice and Women Rights Protection.',
+            'image' => 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400',
+            'twitter' => '#',
+            'facebook' => '#',
+            'instagram' => '#',
+            'linkedin' => '#',
+        ),
+        array(
+            'name' => 'अमित थापा',
+            'specialty' => '',
+            'description' => 'Seasoned Legal Practitioner with extensive experience in Criminal Law, Constitutional Law, and Human Rights. Expertise in Criminal Defense, Bail Applications, Appeals, and Supreme Court Practice. Strong Professional background in Legal Documentation, Case Strategy Development, and Client Advocacy. Specialized in Criminal Justice System and Constitutional Matters.',
+            'image' => 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400',
+            'twitter' => '#',
+            'facebook' => '#',
+            'instagram' => '#',
+            'linkedin' => '#',
+        ),
+        array(
+            'name' => 'प्रिया श्रेष्ठ',
+            'specialty' => '',
+            'description' => 'Distinguished Legal Expert with comprehensive experience in Corporate Law, Intellectual Property Rights, and Commercial Litigation. Proficient in Contract Drafting, Company Registration, Trademark Registration, and Business Law Compliance. Advanced skills in Corporate Governance, Merger & Acquisitions, and International Business Law. Strong Professional with Corporate Legal Advisory practice.',
+            'image' => 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400',
+            'twitter' => '#',
+            'facebook' => '#',
+            'instagram' => '#',
+            'linkedin' => '#',
+        ),
+    );
+}
 ?>
 
 <main id="primary" class="site-main">
@@ -57,10 +68,10 @@ $attorneys = array(
     <div class="pt-32 px-6 mb-16">
         <div class="max-w-6xl mx-auto text-center">
             <h1 class="text-5xl font-extrabold mb-2 tracking-tight text-[#1A2B3C]">
-                Meet Our <span class="text-[#26cf71]">Legal Team</span>
+                <?php echo wp_kses_post( $team_title ); ?>
             </h1>
             <p class="text-lg font-medium opacity-90 text-gray-700">
-                Experienced attorneys dedicated to protecting your rights
+                <?php echo esc_html( $team_subtitle ); ?>
             </p>
         </div>
     </div>
@@ -69,8 +80,8 @@ $attorneys = array(
     <section class="bg-white py-0 px-6">
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <?php foreach ( $attorneys as $attorney ) : ?>
-                    <div class="group cursor-pointer">
+                <?php foreach ( $team_members as $attorney ) : ?>
+                    <div class="group cursor-pointer flex flex-col h-full">
                         <!-- Attorney Image -->
                         <div class="relative overflow-hidden rounded-2xl mb-4 aspect-[4/5] shadow-lg">
                             <img 
@@ -81,7 +92,7 @@ $attorneys = array(
                         </div>
                         
                         <!-- Attorney Info -->
-                        <div class="text-center">
+                        <div class="text-center flex flex-col flex-grow">
                             <h3 class="text-xl font-bold text-gray-900 mb-1">
                                 <?php echo esc_html( $attorney['name'] ); ?>
                             </h3>
@@ -89,7 +100,7 @@ $attorneys = array(
                                 <?php echo esc_html( $attorney['specialty'] ); ?>
                             </p>
                             
-                            <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                            <p class="text-gray-600 text-sm leading-relaxed mb-4 flex-grow text-left">
                                 <?php echo esc_html( $attorney['description'] ); ?>
                             </p>
                             

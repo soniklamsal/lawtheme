@@ -32,8 +32,46 @@ function lawfirm_pro_register_post_types() {
         'supports'            => array( 'title', 'editor', 'excerpt', 'thumbnail', 'comments' ),
         'show_in_rest'        => true,
     ) );
+    
+    // Register AMC Package Custom Post Type
+    register_post_type( 'amc_package', array(
+        'labels' => array(
+            'name'               => esc_html__( 'AMC Packages', 'lawfirm-pro' ),
+            'singular_name'      => esc_html__( 'AMC Package', 'lawfirm-pro' ),
+            'add_new'            => esc_html__( 'Add New', 'lawfirm-pro' ),
+            'add_new_item'       => esc_html__( 'Add New Package', 'lawfirm-pro' ),
+            'edit_item'          => esc_html__( 'Edit Package', 'lawfirm-pro' ),
+            'new_item'           => esc_html__( 'New Package', 'lawfirm-pro' ),
+            'view_item'          => esc_html__( 'View Package', 'lawfirm-pro' ),
+            'search_items'       => esc_html__( 'Search Packages', 'lawfirm-pro' ),
+            'not_found'          => esc_html__( 'No packages found', 'lawfirm-pro' ),
+            'not_found_in_trash' => esc_html__( 'No packages found in trash', 'lawfirm-pro' ),
+        ),
+        'public'              => true,
+        'has_archive'         => true,
+        'publicly_queryable'  => true,
+        'show_ui'             => true,
+        'show_in_menu'        => true,
+        'query_var'           => true,
+        'rewrite'             => array( 'slug' => 'amc-packages' ),
+        'capability_type'     => 'post',
+        'menu_icon'           => 'dashicons-portfolio',
+        'menu_position'       => 29,
+        'supports'            => array( 'title', 'editor', 'thumbnail' ),
+        'show_in_rest'        => true,
+    ) );
 }
 add_action( 'init', 'lawfirm_pro_register_post_types' );
+
+// Flush rewrite rules once after theme activation
+function lawfirm_pro_flush_rewrite_once() {
+    if ( get_option( 'lawfirm_pro_flush_done' ) != 'yes' ) {
+        lawfirm_pro_register_post_types();
+        flush_rewrite_rules();
+        update_option( 'lawfirm_pro_flush_done', 'yes' );
+    }
+}
+add_action( 'init', 'lawfirm_pro_flush_rewrite_once', 999 );
 
 // Add custom meta boxes for Legal Service fields
 function lawfirm_pro_add_service_meta_boxes() {

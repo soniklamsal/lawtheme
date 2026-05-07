@@ -28,34 +28,16 @@ if ( empty( $parent_practice_areas ) || is_wp_error( $parent_practice_areas ) ) 
             <div class="flex gap-8 pb-4">
                 <?php 
                 foreach ( $parent_practice_areas as $practice_area ) : 
-                    // Try multiple possible meta keys for taxonomy images
-                    $term_image = '';
+                    // Get practice area image from term meta
+                    $term_image = get_term_meta( $practice_area->term_id, 'practice_area_image', true );
                     
-                    // Common meta keys used by various plugins
-                    $possible_keys = array(
-                        'practice_area_image',
-                        'thumbnail_id',
-                        'category-image-id',
-                        'image',
-                        'term_image',
-                        'category_image'
-                    );
-                    
-                    foreach ( $possible_keys as $key ) {
-                        $meta_value = get_term_meta( $practice_area->term_id, $key, true );
-                        if ( ! empty( $meta_value ) ) {
-                            // If it's an attachment ID, get the URL
-                            if ( is_numeric( $meta_value ) ) {
-                                $term_image = wp_get_attachment_image_url( $meta_value, 'medium' );
-                            } else {
-                                // It's already a URL
-                                $term_image = $meta_value;
-                            }
-                            if ( ! empty( $term_image ) ) {
-                                break;
-                            }
-                        }
+                    // If it's an attachment ID, get the URL
+                    if ( ! empty( $term_image ) && is_numeric( $term_image ) ) {
+                        $term_image = wp_get_attachment_image_url( $term_image, 'medium' );
                     }
+                    
+                    // Debug: Let's see what we have
+                    // error_log( 'Practice Area: ' . $practice_area->name . ' - Image: ' . $term_image );
                     
                     // If no term meta image, try to get the featured image from the first service in this practice area
                     if ( empty( $term_image ) ) {

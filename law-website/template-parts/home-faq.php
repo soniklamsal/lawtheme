@@ -19,11 +19,11 @@ if ( ! is_array( $faq_items ) ) {
 }
 
 // Get stats from customizer
-$cases_won_number = get_theme_mod( 'lawfirm_cases_won_number', '500' );
+$cases_won_number = get_theme_mod( 'lawfirm_cases_won_number', '1000' );
 $cases_won_label = get_theme_mod( 'lawfirm_cases_won_label', 'Cases Won' );
 $attorneys_number = get_theme_mod( 'lawfirm_attorneys_number', '50' );
 $attorneys_label = get_theme_mod( 'lawfirm_attorneys_label', 'Expert Attorneys' );
-$practice_areas_number = get_theme_mod( 'lawfirm_practice_areas_number', '25' );
+$practice_areas_number = get_theme_mod( 'lawfirm_practice_areas_number', '30' );
 $practice_areas_label = get_theme_mod( 'lawfirm_practice_areas_label', 'Practice Areas' );
 
 // Default FAQ items if none set
